@@ -1,122 +1,132 @@
-# Conductor Extension for Gemini CLI
+# Conductor Plugin for Claude Code
 
-**Measure twice, code once.**
+**Context-Driven Development** - Measure twice, code once.
 
-Conductor is a Gemini CLI extension that enables **Context-Driven Development**. It turns the Gemini CLI into a proactive project manager that follows a strict protocol to specify, plan, and implement software features and bug fixes.
+Conductor transforms AI-assisted development into a disciplined process with persistent project context, specifications, and phased implementation plans.
 
-Instead of just writing code, Conductor ensures a consistent, high-quality lifecycle for every task: **Context -> Spec & Plan -> Implement**.
+## Philosophy
 
-The philosophy behind Conductor is simple: control your code. By treating context as a managed artifact alongside your code, you transform your repository into a single source of truth that drives every agent interaction with deep, persistent project awareness.
+By treating context as a managed artifact alongside your code, Conductor enables AI agents to work with deep, persistent project awareness. The protocol follows: **Context → Spec & Plan → Implement**.
 
-## Features
+## Commands
 
-- **Plan before you build**: Create specs and plans that guide the agent for new and existing codebases.
-- **Maintain context**: Ensure AI follows style guides, tech stack choices, and product goals.
-- **Iterate safely**: Review plans before code is written, keeping you firmly in the loop.
-- **Work as a team**: Set project-level context for your product, tech stack, and workflow preferences that become a shared foundation for your team.
-- **Build on existing projects**: Intelligent initialization for both new (Greenfield) and existing (Brownfield) projects.
-- **Smart revert**: A git-aware revert command that understands logical units of work (tracks, phases, tasks) rather than just commit hashes.
+| Command | Description |
+|---------|-------------|
+| `/conductor:setup` | Initialize Conductor in your project |
+| `/conductor:newTrack [description]` | Create a new feature/bug track with spec and plan |
+| `/conductor:implement [track]` | Execute tasks from a track's plan |
+| `/conductor:status` | Display project progress overview |
+| `/conductor:revert [target]` | Git-aware revert of tracks, phases, or tasks |
 
 ## Installation
 
-Install the Conductor extension by running the following command from your terminal:
+### Option 1: Development Mode (Local Testing)
 
 ```bash
-gemini extensions install https://github.com/gemini-cli-extensions/conductor --auto-update
+claude --plugin-dir .claude/plugins/conductor
 ```
 
-The `--auto-update` is optional: if specified, it will update to new versions as they are released.
-
-## Usage
-
-Conductor is designed to manage the entire lifecycle of your development tasks.
-
-**Note on Token Consumption:** Conductor's context-driven approach involves reading and analyzing your project's context, specifications, and plans. This can lead to increased token consumption, especially in larger projects or during extensive planning and implementation phases. You can check the token consumption in the current session by running `/stats model`.
-
-### 1. Set Up the Project (Run Once)
-
-When you run `/conductor:setup`, Conductor helps you define the core components of your project context. This context is then used for building new components or features by you or anyone on your team.
-
-- **Product**: Define project context (e.g. users, product goals, high-level features).
-- **Product guidelines**: Define standards (e.g. prose style, brand messaging, visual identity).
-- **Tech stack**: Configure technical preferences (e.g. language, database, frameworks).
-- **Workflow**: Set team preferences (e.g. TDD, commit strategy). Uses [workflow.md](templates/workflow.md) as a customizable template.
-
-**Generated Artifacts:**
-- `conductor/product.md`
-- `conductor/product-guidelines.md`
-- `conductor/tech-stack.md`
-- `conductor/workflow.md`
-- `conductor/code_styleguides/`
-- `conductor/tracks.md`
+### Option 2: Install from Marketplace
 
 ```bash
+# Add marketplace (if published)
+claude marketplace add https://github.com/your-org/conductor-marketplace
+
+# Install plugin
+claude plugin install conductor
+```
+
+## Project Structure
+
+After running `/conductor:setup`, your project will have:
+
+```
+conductor/
+├── product.md                    # Product vision, users, goals
+├── product-guidelines.md         # Prose style, brand messaging
+├── tech-stack.md                 # Languages, frameworks, databases
+├── workflow.md                   # Team preferences (TDD, commits)
+├── code_styleguides/             # Language-specific style guides
+├── tracks.md                     # Master tracks file
+└── tracks/
+    └── <track_id>/
+        ├── metadata.json         # Track metadata
+        ├── spec.md               # Detailed specifications
+        └── plan.md               # Phased implementation plan
+```
+
+## Workflow
+
+### 1. Setup (One-time)
+
+```
 /conductor:setup
 ```
 
-### 2. Start a New Track (Feature or Bug)
+Conductor will guide you through:
+- Project discovery (brownfield vs greenfield)
+- Product definition (vision, guidelines, tech stack)
+- Workflow configuration (TDD, commit strategy)
+- Initial track generation
 
-When you’re ready to take on a new feature or bug fix, run `/conductor:newTrack`. This initializes a **track** — a high-level unit of work. Conductor helps you generate two critical artifacts:
+### 2. Create Tracks
 
-- **Specs**: The detailed requirements for the specific job. What are we building and why?
-- **Plan**: An actionable to-do list containing phases, tasks, and sub-tasks.
-
-**Generated Artifacts:**
-- `conductor/tracks/<track_id>/spec.md`
-- `conductor/tracks/<track_id>/plan.md`
-- `conductor/tracks/<track_id>/metadata.json`
-
-```bash
-/conductor:newTrack
-# OR with a description
-/conductor:newTrack "Add a dark mode toggle to the settings page"
+```
+/conductor:newTrack user authentication with OAuth
 ```
 
-### 3. Implement the Track
+Creates specification and phased plan for the feature.
 
-Once you approve the plan, run `/conductor:implement`. Your coding agent then works through the `plan.md` file, checking off tasks as it completes them.
+### 3. Implement
 
-**Updated Artifacts:**
-- `conductor/tracks.md` (Status updates)
-- `conductor/tracks/<track_id>/plan.md` (Status updates)
-- Project context files (Synchronized on completion)
-
-```bash
+```
 /conductor:implement
 ```
 
-Conductor will:
-1.  Select the next pending task.
-2.  Follow the defined workflow (e.g., TDD: Write Test -> Fail -> Implement -> Pass).
-3.  Update the status in the plan as it progresses.
-4.  **Verify Progress**: Guide you through a manual verification step at the end of each phase to ensure everything works as expected.
+Executes tasks following your configured workflow (e.g., TDD: write tests → implement → verify).
 
-During implementation, you can also:
+### 4. Monitor Progress
 
-- **Check status**: Get a high-level overview of your project's progress.
-  ```bash
-  /conductor:status
-  ```
-- **Revert work**: Undo a feature or a specific task if needed.
-  ```bash
-  /conductor:revert
-  ```
+```
+/conductor:status
+```
 
-## Commands Reference
+Shows current phase, task, and overall progress.
 
-| Command | Description | Artifacts |
-| :--- | :--- | :--- |
-| `/conductor:setup` | Scaffolds the project and sets up the Conductor environment. Run this once per project. | `conductor/product.md`<br>`conductor/product-guidelines.md`<br>`conductor/tech-stack.md`<br>`conductor/workflow.md`<br>`conductor/tracks.md` |
-| `/conductor:newTrack` | Starts a new feature or bug track. Generates `spec.md` and `plan.md`. | `conductor/tracks/<id>/spec.md`<br>`conductor/tracks/<id>/plan.md`<br>`conductor/tracks.md` |
-| `/conductor:implement` | Executes the tasks defined in the current track's plan. | `conductor/tracks.md`<br>`conductor/tracks/<id>/plan.md` |
-| `/conductor:status` | Displays the current progress of the tracks file and active tracks. | Reads `conductor/tracks.md` |
-| `/conductor:revert` | Reverts a track, phase, or task by analyzing git history. | Reverts git history |
+### 5. Revert if Needed
 
-## Resources
+```
+/conductor:revert
+```
 
-- [Gemini CLI extensions](https://geminicli.com/docs/extensions/): Documentation about using extensions in Gemini CLI
-- [GitHub issues](https://github.com/gemini-cli-extensions/conductor/issues): Report bugs or request features
+Git-aware rollback of tracks, phases, or individual tasks.
 
-## Legal
+## Templates
 
-- License: [Apache License 2.0](LICENSE)
+The plugin includes templates for:
+
+- **Workflow:** TDD, commit strategy, code coverage requirements
+- **Code Style Guides:**
+  - General principles
+  - Python
+  - JavaScript
+  - TypeScript
+  - Go
+  - Dart
+  - HTML/CSS
+
+## Key Features
+
+- **Resumable Setup:** If interrupted, setup resumes from last successful step
+- **Brownfield Support:** Analyzes existing projects to infer tech stack
+- **TDD Enforcement:** Plans follow Test-Driven Development structure
+- **Git Integration:** Commits, notes, and intelligent revert
+- **Documentation Sync:** Auto-updates product docs after track completion
+
+## Credits
+
+Ported from [Gemini CLI Conductor Extension](https://github.com/gemini-cli-extensions/conductor).
+
+## License
+
+Apache-2.0
