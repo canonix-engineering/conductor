@@ -18,6 +18,7 @@ By treating context as a managed artifact alongside your code, Conductor enables
 | `/conductor:newTrack [description]` | Create a new feature/bug track with spec and plan |
 | `/conductor:implement [track]` | Execute tasks from a track's plan |
 | `/conductor:status` | Display project progress overview |
+| `/conductor:review [track]` | Review completed track work against guidelines and plan |
 | `/conductor:revert [target]` | Git-aware revert of tracks, phases, or tasks |
 
 ## Installation
@@ -117,6 +118,8 @@ The plugin includes templates for:
   - JavaScript
   - TypeScript
   - Go
+  - C++
+  - C#
   - Dart
   - HTML/CSS
 
