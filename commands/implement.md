@@ -117,21 +117,26 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
 
 2.  **Ask for User Choice:**
     > "Track '<track_description>' is complete. What would you like to do?
-    > A) **Archive:** Move to `conductor/archive/` and remove from tracks file.
-    > B) **Delete:** Permanently delete folder and remove from tracks file.
-    > C) **Skip:** Leave in tracks file.
-    > Please choose A, B, or C."
+    > A) **Review (Recommended):** Run a code review against project guidelines before closing.
+    > B) **Archive:** Move to `conductor/archive/` and remove from tracks file.
+    > C) **Delete:** Permanently delete folder and remove from tracks file.
+    > D) **Skip:** Leave in tracks file.
+    > Please choose A, B, C, or D."
 
 3.  **Handle Response:**
-    *   **A (Archive):**
+    *   **A (Review):**
+        - Invoke `/conductor:review` targeting this track.
+        - After review completes, the review command handles its own cleanup flow.
+
+    *   **B (Archive):**
         - Create `conductor/archive/` if needed.
         - Move `conductor/tracks/<track_id>` to `conductor/archive/<track_id>`.
         - Remove section from `conductor/tracks.md`.
         - Announce: "Track archived successfully."
 
-    *   **B (Delete):**
+    *   **C (Delete):**
         - **Confirm:** "WARNING: This permanently deletes the track. Are you sure? (yes/no)"
         - If yes: delete folder, remove from tracks file, announce completion.
         - If no: announce cancellation.
 
-    *   **C (Skip):** "Okay, the completed track will remain in your tracks file."
+    *   **D (Skip):** "Okay, the completed track will remain in your tracks file."
