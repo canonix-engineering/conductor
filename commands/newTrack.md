@@ -96,6 +96,7 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
 3.  **Create Directory:** `conductor/tracks/<track_id>/`
 
 4.  **Create `metadata.json`:**
+    *   Get current git SHA: `git rev-parse HEAD`
     ```json
     {
       "track_id": "<track_id>",
@@ -103,9 +104,11 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
       "status": "new",
       "created_at": "YYYY-MM-DDTHH:MM:SSZ",
       "updated_at": "YYYY-MM-DDTHH:MM:SSZ",
-      "description": "<Initial user description>"
+      "description": "<Initial user description>",
+      "base_sha": "<current git HEAD SHA>"
     }
     ```
+    *   **Note:** `base_sha` enables `/conductor:reconcile` to detect code drift
 
 5.  **Write Files:**
     *   `conductor/tracks/<track_id>/spec.md`
