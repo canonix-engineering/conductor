@@ -29,6 +29,15 @@ By treating context as a managed artifact alongside your code, Conductor enables
 curl -fsSL https://raw.githubusercontent.com/canonix-engineering/conductor/main/install.sh | bash
 ```
 
+The install script will:
+1. Check for required dependencies (`claude` CLI and `git`)
+2. Attempt automatic installation via Claude Code's plugin CLI
+3. If CLI install fails, fall back to cloning the repository to `~/.claude/marketplace/conductor-claude` and provide manual setup instructions
+
+**Requirements:**
+- [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) installed
+- Git installed
+
 ### Manual Install (inside Claude Code)
 
 ```

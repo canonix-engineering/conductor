@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # Conductor Plugin Installer for Claude Code
-# Usage: curl -fsSL https://raw.githubusercontent.com/leansii/conductor-claude/main/install.sh | bash
+# Usage: curl -fsSL https://raw.githubusercontent.com/canonix-engineering/conductor/main/install.sh | bash
 
-REPO="leansii/conductor-claude"
+REPO="canonix-engineering/conductor"
 REPO_URL="https://github.com/${REPO}.git"
 MARKETPLACE_NAME="conductor-marketplace"
 PLUGIN_NAME="conductor"
