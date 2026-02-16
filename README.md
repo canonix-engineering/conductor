@@ -26,13 +26,13 @@ By treating context as a managed artifact alongside your code, Conductor enables
 ### Quick Install (Recommended)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/leansii/conductor-claude/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/canonix-engineering/conductor/main/install.sh | bash
 ```
 
 ### Manual Install (inside Claude Code)
 
 ```
-/plugin marketplace add leansii/conductor-claude
+/plugin marketplace add canonix-engineering/conductor
 /plugin install conductor@conductor-marketplace
 ```
 
